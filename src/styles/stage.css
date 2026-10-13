@@ -1,0 +1,29 @@
+.perform { display: grid; gap: 14px; justify-items: center; }
+.stage { position: relative; width: min(100%, 560px); height: min(62dvh, 560px); min-height: 360px; border-radius: 36px; border: 4px solid var(--ink); overflow: hidden; box-shadow: var(--shadow); isolation: isolate; }
+.backdrop { position: absolute; inset: 0; z-index: 0; }
+.backdrop .cloud { animation: cloudDrift 24s ease-in-out infinite alternate; }
+.backdrop .cloud.slow { animation-duration: 36s; }
+@keyframes cloudDrift { from { translate: -24px 0; } to { translate: 40px 0; } }
+.twinkle { animation: twinkle 2.4s ease-in-out infinite; animation-delay: var(--d); }
+@keyframes twinkle { 50% { opacity: 0.25; } }
+[data-motion='reduced'] .backdrop .cloud, [data-motion='reduced'] .twinkle { animation: none; }
+.stage-char { position: absolute; inset: 6% 6% 3%; z-index: 3; }
+.stage-start { position: absolute; z-index: 9; left: 50%; top: 50%; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 4px; padding: 22px 30px; border: 4px solid var(--ink); border-radius: 34px; background: #ff8fa3; font-weight: 700; font-size: 1.5rem; cursor: pointer; box-shadow: 0 7px 0 #d9566f; }
+.stage-banner { position: absolute; z-index: 9; left: 50%; top: 10%; transform: translateX(-50%); padding: 12px 26px; border-radius: 24px; border: 3px solid var(--ink); background: #ffe08a; font-size: 1.7rem; font-weight: 700; white-space: nowrap; animation: pop 0.45s cubic-bezier(0.3, 1.5, 0.5, 1); }
+.stage-note { text-align: center; }
+.perform-controls { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: min(100%, 560px); }
+.perform-controls .btn { flex: 1 1 200px; }
+.perform-links { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+/* floating notes + stars */
+.effects { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; }
+.effects:not(.on) .fx-note, .effects:not(.on) .fx-trail { display: none; }
+.fx { position: absolute; display: block; }
+.fx-star { animation: twinkle 2.2s ease-in-out infinite; animation-delay: var(--delay); }
+.fx-note { bottom: -50px; animation: floatUp 6.5s linear infinite; animation-delay: var(--delay); }
+@keyframes floatUp { 0% { transform: translate(0, 0) rotate(-8deg); opacity: 0; } 12% { opacity: 1; } 100% { transform: translate(var(--drift), -540px) rotate(12deg); opacity: 0; } }
+.fx-trail { top: 62%; animation: trailDown 2.4s ease-out infinite; animation-delay: var(--delay); }
+@keyframes trailDown { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--drift), 260px) scale(0.3); opacity: 0; } }
+.effects.is-paused .fx { animation-play-state: paused; }
+[data-motion='reduced'] .fx-note, [data-motion='reduced'] .fx-trail { display: none; }
+[data-motion='reduced'] .fx-star { animation: none; }
