@@ -1,0 +1,56 @@
+.perform { display: grid; gap: 14px; justify-items: center; }
+.stage { position: relative; width: min(100%, 560px); height: min(62dvh, 560px); min-height: 360px; border-radius: 36px; border: 4px solid var(--ink); overflow: hidden; box-shadow: var(--shadow); isolation: isolate; }
+.backdrop { position: absolute; inset: 0; z-index: 0; }
+.backdrop .cloud { animation: cloudDrift 24s ease-in-out infinite alternate; }
+.backdrop .cloud.slow { animation-duration: 36s; }
+@keyframes cloudDrift { from { translate: -24px 0; } to { translate: 40px 0; } }
+.twinkle { animation: twinkle 2.4s ease-in-out infinite; animation-delay: var(--d); }
+@keyframes twinkle { 50% { opacity: 0.25; } }
+[data-motion='reduced'] .backdrop .cloud, [data-motion='reduced'] .twinkle { animation: none; }
+.stage-char { position: absolute; inset: 6% 6% 3%; z-index: 3; }
+.stage-start { position: absolute; z-index: 9; left: 50%; top: 50%; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 4px; padding: 22px 30px; border: 4px solid var(--ink); border-radius: 34px; background: #ff8fa3; font-weight: 700; font-size: 1.5rem; cursor: pointer; box-shadow: 0 7px 0 #d9566f; }
+.stage-banner { position: absolute; z-index: 9; left: 50%; top: 10%; transform: translateX(-50%); padding: 12px 26px; border-radius: 24px; border: 3px solid var(--ink); background: #ffe08a; font-size: 1.7rem; font-weight: 700; white-space: nowrap; animation: pop 0.45s cubic-bezier(0.3, 1.5, 0.5, 1); }
+.stage-note { text-align: center; }
+.perform-controls { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; width: min(100%, 560px); }
+.perform-controls .btn { flex: 1 1 200px; }
+.perform-links { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+/* floating notes + stars */
+.effects { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; }
+.effects:not(.on) .fx-note, .effects:not(.on) .fx-trail { display: none; }
+.fx { position: absolute; display: block; }
+.fx-star { animation: twinkle 2.2s ease-in-out infinite; animation-delay: var(--delay); }
+.fx-note { bottom: -50px; animation: floatUp 6.5s linear infinite; animation-delay: var(--delay); }
+@keyframes floatUp { 0% { transform: translate(0, 0) rotate(-8deg); opacity: 0; } 12% { opacity: 1; } 100% { transform: translate(var(--drift), -540px) rotate(12deg); opacity: 0; } }
+.fx-trail { top: 62%; animation: trailDown 2.4s ease-out infinite; animation-delay: var(--delay); }
+@keyframes trailDown { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--drift), 260px) scale(0.3); opacity: 0; } }
+.effects.is-paused .fx { animation-play-state: paused; }
+[data-motion='reduced'] .fx-note, [data-motion='reduced'] .fx-trail { display: none; }
+[data-motion='reduced'] .fx-star { animation: none; }
+
+/* ---- The "video": scene camera, title card, subtitles, bursts ---- */
+.stage-char { transform-origin: 50% 70%; transition: transform 0.9s ease; }
+.stage[data-scene='enter'] .stage-char { animation: sceneEnter 2.2s cubic-bezier(0.2, 1.15, 0.4, 1) both; }
+.stage[data-scene='special'] .stage-char { transform: scale(1.14); }
+.stage[data-scene='finale'] .stage-char { animation: sceneFinale 2.4s ease-in-out both; }
+@keyframes sceneEnter { 0% { transform: translateX(-95%) scale(0.55) rotate(-10deg); opacity: 0; } 45% { opacity: 1; } 75% { transform: translateX(4%) scale(1.04) rotate(2deg); } 100% { transform: none; opacity: 1; } }
+@keyframes sceneFinale { 0% { transform: scale(1.14); } 22% { transform: translateY(-9%) scale(1.22) rotate(-9deg); } 48% { transform: translateY(0) scale(1.16) rotate(9deg); } 74% { transform: translateY(-11%) scale(1.26) rotate(-5deg); } 100% { transform: none; } }
+.stage .backdrop svg { transition: transform 1.2s ease; transform-origin: 50% 100%; }
+.stage[data-scene='special'] .backdrop svg { transform: scale(1.12); }
+.stage[data-scene='finale'] .backdrop svg { transform: scale(1.06) translateX(-2%); }
+.stage[data-playing='1'] .backdrop svg { animation: bgDrift 9s ease-in-out infinite alternate; }
+@keyframes bgDrift { from { translate: -1.5% 0; } to { translate: 1.5% 0; } }
+.stage-title { position: absolute; z-index: 9; left: 50%; top: 11%; transform: translateX(-50%); padding: 10px 26px; border-radius: 24px; border: 3px solid var(--ink); background: rgba(255, 255, 255, 0.92); font-size: 1.5rem; font-weight: 700; white-space: nowrap; animation: titleCard 2.4s ease both; }
+@keyframes titleCard { 0% { opacity: 0; transform: translate(-50%, -20px) scale(0.9); } 15%, 75% { opacity: 1; transform: translate(-50%, 0) scale(1); } 100% { opacity: 0; transform: translate(-50%, -10px); } }
+.stage-lyric { position: absolute; z-index: 9; left: 50%; bottom: 4%; width: min(92%, 480px); transform: translateX(-50%); padding: 10px 16px; border-radius: 22px; border: 3px solid var(--ink); background: rgba(255, 255, 255, 0.94); text-align: center; font-size: clamp(1.05rem, 4.2vw, 1.4rem); font-weight: 600; line-height: 1.2; animation: lyricIn 0.4s ease-out both; }
+@keyframes lyricIn { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.burst { position: absolute; left: 50%; top: 46%; z-index: 7; pointer-events: none; }
+.burst svg { position: absolute; left: -12px; top: -12px; animation: burstOut 1.2s ease-out forwards; }
+@keyframes burstOut { 0% { transform: rotate(var(--ang)) translateY(0) scale(0.2); opacity: 1; } 100% { transform: rotate(var(--ang)) translateY(calc(var(--dist) * -1)) scale(1.1); opacity: 0; } }
+.fx-bubble { bottom: -30px; border-radius: 50%; border: 2.5px solid rgba(255, 255, 255, 0.95); background: rgba(255, 255, 255, 0.28); animation: bubbleUp 5.5s ease-in infinite; animation-delay: var(--delay); }
+@keyframes bubbleUp { 0% { transform: translate(0, 0); opacity: 0; } 12% { opacity: 1; } 100% { transform: translate(var(--drift), -520px); opacity: 0; } }
+.fx-petal { top: -20px; border-radius: 80% 20% 80% 20%; background: #ffb3d1; animation: petalFall 6s linear infinite; animation-delay: var(--delay); }
+@keyframes petalFall { 0% { transform: translate(0, 0) rotate(0); opacity: 0; } 10% { opacity: 1; } 100% { transform: translate(var(--drift), 560px) rotate(420deg); opacity: 0.8; } }
+.effects:not(.on) .fx-bubble, .effects:not(.on) .fx-petal { display: none; }
+[data-motion='reduced'] .fx-bubble, [data-motion='reduced'] .fx-petal, [data-motion='reduced'] .burst, [data-motion='reduced'] .stage-title { display: none; }
+[data-motion='reduced'] .stage-char, [data-motion='reduced'] .stage .backdrop svg { animation: none !important; transform: none !important; transition: none; }

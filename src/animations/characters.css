@@ -1,0 +1,168 @@
+/*
+ * Dance moves. Everything moves with plain CSS keyframes, driven by the `.is-dancing`
+ * class that AnimatedCharacter sets. Each region carries a `group` (see src/artwork/*.js),
+ * rendered as `.part.g-<group>`, which is what these rules target.
+ * --beat  = one dance beat (set per character in src/data/characters.js)
+ * --amp   = movement size (1 normally, 0.3 in reduced-motion / "gentle" mode)
+ * transform-origin values are drawing units (the picture is 400 x 400).
+ */
+.char .part, .char .char-root { transform-box: view-box; }
+.char.is-paused *, .char.is-paused { animation-play-state: paused !important; }
+
+/* ---------- Dino: stomps, bounces, wiggles its tail ---------- */
+.char-dino.is-dancing .char-root { transform-origin: 200px 385px; animation: dinoBounce var(--beat) ease-in-out infinite; }
+.char-dino.is-dancing .g-tail { transform-origin: 125px 285px; animation: dinoTail calc(var(--beat) / 2) ease-in-out infinite alternate; }
+.char-dino.is-dancing .g-head { transform-origin: 250px 205px; animation: dinoNod var(--beat) ease-in-out infinite; }
+.char-dino.is-dancing .g-legL { animation: dinoStomp var(--beat) ease-in-out infinite; }
+.char-dino.is-dancing .g-legR { animation: dinoStomp var(--beat) ease-in-out infinite; animation-delay: calc(var(--beat) / -2); }
+@keyframes dinoBounce { 0%, 100% { transform: translateY(0) scale(1, 1); } 50% { transform: translateY(calc(var(--amp) * -22px)) scale(calc(1 - var(--amp) * 0.02), calc(1 + var(--amp) * 0.04)); } }
+@keyframes dinoTail { from { transform: rotate(calc(var(--amp) * -12deg)); } to { transform: rotate(calc(var(--amp) * 14deg)); } }
+@keyframes dinoNod { 0%, 100% { transform: rotate(calc(var(--amp) * -4deg)); } 50% { transform: rotate(calc(var(--amp) * 5deg)); } }
+@keyframes dinoStomp { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(calc(var(--amp) * -14px)); } 50% { transform: translateY(0); } }
+
+/* ---------- Butterfly: flaps its wings and floats ---------- */
+.char-butterfly.is-dancing .char-root { transform-origin: 200px 240px; animation: butterflyFloat calc(var(--beat) * 4) ease-in-out infinite; }
+.char-butterfly.is-dancing .g-wingL, .char-butterfly.is-dancing .g-wingR { transform-origin: 200px 230px; animation: butterflyFlap var(--beat) ease-in-out infinite; }
+.char-butterfly.is-dancing .g-body { transform-origin: 200px 240px; animation: butterflySway calc(var(--beat) * 2) ease-in-out infinite; }
+@keyframes butterflyFloat { 0%, 100% { transform: translate(0, 10px) rotate(-2deg); } 25% { transform: translate(calc(var(--amp) * 18px), calc(var(--amp) * -18px)) rotate(2deg); } 50% { transform: translate(0, calc(var(--amp) * -30px)) rotate(-1deg); } 75% { transform: translate(calc(var(--amp) * -18px), calc(var(--amp) * -12px)) rotate(2deg); } }
+@keyframes butterflyFlap { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(calc(1 - var(--amp) * 0.62)); } }
+@keyframes butterflySway { 0%, 100% { transform: rotate(calc(var(--amp) * -2deg)); } 50% { transform: rotate(calc(var(--amp) * 2deg)); } }
+
+/* ---------- Elephant: sways, swings its trunk, bounces gently ---------- */
+.char-elephant.is-dancing .char-root { transform-origin: 200px 385px; animation: elephantSway calc(var(--beat) * 2) ease-in-out infinite; }
+.char-elephant.is-dancing .g-trunk { transform-origin: 200px 215px; animation: elephantTrunk var(--beat) ease-in-out infinite alternate; }
+.char-elephant.is-dancing .g-earL { transform-origin: 140px 150px; animation: elephantEarL calc(var(--beat) / 2) ease-in-out infinite alternate; }
+.char-elephant.is-dancing .g-earR { transform-origin: 260px 150px; animation: elephantEarR calc(var(--beat) / 2) ease-in-out infinite alternate; }
+.char-elephant.is-dancing .g-head { transform-origin: 200px 280px; animation: elephantBob var(--beat) ease-in-out infinite; }
+.char-elephant.is-dancing .g-footL { animation: elephantFoot var(--beat) ease-in-out infinite; }
+.char-elephant.is-dancing .g-footR { animation: elephantFoot var(--beat) ease-in-out infinite; animation-delay: calc(var(--beat) / -2); }
+@keyframes elephantSway { 0%, 100% { transform: translateX(calc(var(--amp) * -14px)) rotate(calc(var(--amp) * -3deg)); } 50% { transform: translateX(calc(var(--amp) * 14px)) rotate(calc(var(--amp) * 3deg)); } }
+@keyframes elephantTrunk { from { transform: rotate(calc(var(--amp) * -12deg)); } to { transform: rotate(calc(var(--amp) * 14deg)); } }
+@keyframes elephantEarL { from { transform: rotate(calc(var(--amp) * 9deg)); } to { transform: rotate(calc(var(--amp) * -9deg)); } }
+@keyframes elephantEarR { from { transform: rotate(calc(var(--amp) * -9deg)); } to { transform: rotate(calc(var(--amp) * 9deg)); } }
+@keyframes elephantBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(calc(var(--amp) * -8px)); } }
+@keyframes elephantFoot { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(calc(var(--amp) * -10px)); } 50% { transform: translateY(0); } }
+
+/* ---------- Rocket: shakes, launches upward, flame flickers ---------- */
+.char-rocket.is-dancing .char-root { transform-origin: 200px 390px; animation: rocketFly calc(var(--beat) * 5) ease-in-out infinite; }
+.char-rocket.is-dancing .g-body, .char-rocket.is-dancing .g-finL, .char-rocket.is-dancing .g-finR { transform-origin: 200px 280px; animation: rocketShake 0.14s linear infinite; }
+.char-rocket.is-dancing .g-flame { transform-origin: 200px 304px; animation: rocketFlame 0.22s ease-in-out infinite alternate; }
+@keyframes rocketFly { 0%, 100% { transform: translateY(0) scale(1); } 35% { transform: translateY(calc(var(--amp) * -60px)) scale(0.97); } 60% { transform: translateY(calc(var(--amp) * -110px)) scale(0.94); } 85% { transform: translateY(calc(var(--amp) * -30px)) scale(0.99); } }
+@keyframes rocketShake { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(calc(var(--amp) * -2.5px), 0) rotate(calc(var(--amp) * -1deg)); } 75% { transform: translate(calc(var(--amp) * 2.5px), 0) rotate(calc(var(--amp) * 1deg)); } }
+@keyframes rocketFlame { from { transform: scale(1, 0.85); } to { transform: scale(calc(1 + var(--amp) * 0.12), calc(1 + var(--amp) * 0.25)); } }
+
+/* ---------- Car: rolls side to side, bounces, wheels spin ---------- */
+.char-car.is-dancing .char-root { transform-origin: 200px 350px; animation: carDrive calc(var(--beat) * 2) ease-in-out infinite; }
+.char-car.is-dancing .g-body { transform-origin: 200px 300px; animation: carBounce calc(var(--beat) / 2) ease-in-out infinite; }
+.char-car.is-dancing .g-wheelB { transform-origin: 112px 306px; animation: carSpin calc(var(--beat) * 1.2) linear infinite; }
+.char-car.is-dancing .g-wheelF { transform-origin: 288px 306px; animation: carSpin calc(var(--beat) * 1.2) linear infinite; }
+@keyframes carDrive { 0%, 100% { transform: translateX(calc(var(--amp) * -26px)) rotate(calc(var(--amp) * -2deg)); } 50% { transform: translateX(calc(var(--amp) * 26px)) rotate(calc(var(--amp) * 2deg)); } }
+@keyframes carBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(calc(var(--amp) * -9px)); } }
+@keyframes carSpin { to { transform: rotate(360deg); } }
+
+/* =====================================================================
+ * Shared building-block keyframes (size is set per use with --a / --d / --s)
+ * ===================================================================== */
+@keyframes swing { from { transform: rotate(calc(var(--a, 10deg) * var(--amp) * -1)); } to { transform: rotate(calc(var(--a, 10deg) * var(--amp))); } }
+@keyframes hop { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(calc(var(--d, 14px) * var(--amp) * -1)); } }
+@keyframes step { 0%, 50%, 100% { transform: translateY(0); } 25% { transform: translateY(calc(var(--d, 12px) * var(--amp) * -1)); } }
+@keyframes slide { from { transform: translateX(calc(var(--d, 14px) * var(--amp) * -1)); } to { transform: translateX(calc(var(--d, 14px) * var(--amp))); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(calc(1 + var(--s, 0.06) * var(--amp))); } }
+@keyframes spinFull { to { transform: rotate(360deg); } }
+@keyframes loopFlip { 0% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-60px) rotate(180deg); } 100% { transform: translateY(0) rotate(360deg); } }
+
+/* =====================================================================
+ * SPECIAL MOVES (scene 3 of the show and the finale). Each friend does a signature move.
+ * ===================================================================== */
+/* Dino: ROAR - head tips back, tail whips, big stomps */
+.char-dino.is-dancing.is-special .g-head { animation: dinoRoar calc(var(--beat) * 1.5) ease-in-out infinite; }
+.char-dino.is-dancing.is-special .g-tail { animation: swing calc(var(--beat) / 4) ease-in-out infinite alternate; --a: 24deg; }
+.char-dino.is-dancing.is-special .char-root { animation-duration: calc(var(--beat) / 2); }
+@keyframes dinoRoar { 0%, 100% { transform: rotate(0) scale(1); } 25%, 65% { transform: rotate(calc(var(--amp) * -16deg)) scale(1.07); } 85% { transform: rotate(calc(var(--amp) * 4deg)); } }
+
+/* Butterfly: LOOP-THE-LOOP */
+.char-butterfly.is-dancing.is-special .char-root { animation: loopFlip calc(var(--beat) * 4) ease-in-out infinite; }
+.char-butterfly.is-dancing.is-special .g-wingL, .char-butterfly.is-dancing.is-special .g-wingR { animation-duration: calc(var(--beat) / 2); }
+
+/* Elephant: trunk up! */
+.char-elephant.is-dancing.is-special .g-trunk { animation: elephantTrunkUp calc(var(--beat) * 2) ease-in-out infinite; }
+.char-elephant.is-dancing.is-special .g-earL, .char-elephant.is-dancing.is-special .g-earR { animation-duration: calc(var(--beat) / 4); }
+.char-elephant.is-dancing.is-special .char-root { animation: hop calc(var(--beat) / 2) ease-in-out infinite; --d: 26px; transform-origin: 200px 385px; }
+@keyframes elephantTrunkUp { 0%, 100% { transform: rotate(0); } 30%, 70% { transform: rotate(calc(var(--amp) * -50deg)); } 50% { transform: rotate(calc(var(--amp) * -40deg)); } }
+
+/* Rocket: BLAST OFF */
+.char-rocket.is-dancing.is-special .char-root { animation: rocketBlast calc(var(--beat) * 3) ease-in-out infinite; }
+.char-rocket.is-dancing.is-special .g-flame { animation-duration: 0.1s; }
+@keyframes rocketBlast { 0%, 100% { transform: translateY(0) scale(1); } 40%, 60% { transform: translateY(calc(var(--amp) * -150px)) scale(0.85); } }
+
+/* Car: ZOOM across with a wheelie */
+.char-car.is-dancing.is-special .char-root { animation: carZoom calc(var(--beat) * 3) ease-in-out infinite; }
+.char-car.is-dancing.is-special .g-wheelB, .char-car.is-dancing.is-special .g-wheelF { animation-duration: calc(var(--beat) / 3); }
+@keyframes carZoom { 0%, 100% { transform: translateX(calc(var(--amp) * -50px)) rotate(0); } 25% { transform: translateX(calc(var(--amp) * -30px)) rotate(calc(var(--amp) * -7deg)); } 75% { transform: translateX(calc(var(--amp) * 50px)) rotate(calc(var(--amp) * -4deg)); } }
+
+/* =====================================================================
+ * FISH: swims, wags its tail, flips for its special move
+ * ===================================================================== */
+.char-fish.is-dancing .char-root { transform-origin: 200px 205px; animation: fishSwim calc(var(--beat) * 2) ease-in-out infinite; }
+.char-fish.is-dancing .g-tail { transform-origin: 104px 205px; --a: 16deg; animation: swing calc(var(--beat) / 2) ease-in-out infinite alternate; }
+.char-fish.is-dancing .g-finTop { transform-origin: 200px 130px; --a: 7deg; animation: swing calc(var(--beat) / 2) ease-in-out infinite alternate; }
+.char-fish.is-dancing .g-finBottom { transform-origin: 215px 285px; --a: 9deg; animation: swing calc(var(--beat) / 2) ease-in-out infinite alternate-reverse; }
+.char-fish.is-dancing .g-finSide { transform-origin: 200px 222px; --a: 18deg; animation: swing calc(var(--beat) / 3) ease-in-out infinite alternate; }
+.char-fish.is-dancing .g-head { transform-origin: 285px 185px; --s: 0.07; animation: pulse var(--beat) ease-in-out infinite; }
+@keyframes fishSwim { 0%, 100% { transform: translate(calc(var(--amp) * -12px), calc(var(--amp) * 8px)) rotate(calc(var(--amp) * -3deg)); } 50% { transform: translate(calc(var(--amp) * 12px), calc(var(--amp) * -16px)) rotate(calc(var(--amp) * 4deg)); } }
+.char-fish.is-dancing.is-special .char-root { animation: loopFlip calc(var(--beat) * 3) ease-in-out infinite; }
+.char-fish.is-dancing.is-special .g-tail { animation-duration: calc(var(--beat) / 5); }
+
+/* =====================================================================
+ * CAT: taps its paws, swishes its tail, waves for its special move
+ * ===================================================================== */
+.char-cat.is-dancing .char-root { transform-origin: 200px 385px; --d: 14px; animation: hop var(--beat) ease-in-out infinite; }
+.char-cat.is-dancing .g-tail { transform-origin: 290px 320px; --a: 14deg; animation: swing calc(var(--beat) / 2) ease-in-out infinite alternate; }
+.char-cat.is-dancing .g-head { transform-origin: 200px 250px; --a: 6deg; animation: swing var(--beat) ease-in-out infinite alternate; }
+.char-cat.is-dancing .g-earL { transform-origin: 145px 120px; --a: 9deg; animation: swing calc(var(--beat) / 3) ease-in-out infinite alternate; }
+.char-cat.is-dancing .g-earR { transform-origin: 255px 120px; --a: 9deg; animation: swing calc(var(--beat) / 3) ease-in-out infinite alternate-reverse; }
+.char-cat.is-dancing .g-pawL { --d: 10px; animation: step var(--beat) ease-in-out infinite; }
+.char-cat.is-dancing .g-pawR { --d: 10px; animation: step var(--beat) ease-in-out infinite; animation-delay: calc(var(--beat) / -2); }
+.char-cat.is-dancing.is-special .g-pawR { animation: catWave calc(var(--beat) / 2) ease-in-out infinite alternate; transform-origin: 242px 372px; }
+.char-cat.is-dancing.is-special .g-head { --a: 12deg; animation-duration: calc(var(--beat) / 2); }
+.char-cat.is-dancing.is-special .g-tail { --a: 26deg; animation-duration: calc(var(--beat) / 4); }
+@keyframes catWave { from { transform: translate(8px, calc(var(--amp) * -110px)) rotate(calc(var(--amp) * -26deg)); } to { transform: translate(8px, calc(var(--amp) * -120px)) rotate(calc(var(--amp) * 24deg)); } }
+
+/* =====================================================================
+ * DUCK: waddles, flaps, quacks; flaps hard and hops for its special move
+ * ===================================================================== */
+.char-duck.is-dancing .char-root { transform-origin: 190px 385px; animation: duckWaddle calc(var(--beat) * 1.2) ease-in-out infinite; }
+.char-duck.is-dancing .g-wing { transform-origin: 140px 255px; --a: 14deg; animation: swing calc(var(--beat) / 2) ease-in-out infinite alternate; }
+.char-duck.is-dancing .g-head { transform-origin: 250px 215px; --a: 5deg; animation: swing var(--beat) ease-in-out infinite alternate; }
+.char-duck.is-dancing .g-beak { transform-origin: 334px 168px; --a: 9deg; animation: swing calc(var(--beat) / 2) ease-in-out infinite alternate; }
+.char-duck.is-dancing .g-footL { --d: 12px; animation: step calc(var(--beat) * 1.2) ease-in-out infinite; }
+.char-duck.is-dancing .g-footR { --d: 12px; animation: step calc(var(--beat) * 1.2) ease-in-out infinite; animation-delay: calc(var(--beat) * -0.6); }
+.char-duck.is-dancing .g-tail { transform-origin: 110px 235px; --a: 10deg; animation: swing calc(var(--beat) / 2) ease-in-out infinite alternate; }
+@keyframes duckWaddle { 0%, 100% { transform: translateX(calc(var(--amp) * -10px)) rotate(calc(var(--amp) * -6deg)); } 50% { transform: translateX(calc(var(--amp) * 10px)) rotate(calc(var(--amp) * 6deg)); } }
+.char-duck.is-dancing.is-special .g-wing { --a: 34deg; animation-duration: calc(var(--beat) / 5); }
+.char-duck.is-dancing.is-special .g-beak { --a: 16deg; animation-duration: calc(var(--beat) / 4); }
+.char-duck.is-dancing.is-special .char-root { animation: hop calc(var(--beat) / 1.5) ease-in-out infinite; --d: 34px; }
+
+/* =====================================================================
+ * FLOWER: sways in the breeze, petals pulse; petals spin for its special move
+ * ===================================================================== */
+.char-flower.is-dancing .char-root { transform-origin: 200px 392px; --a: 5deg; animation: swing calc(var(--beat) * 1.5) ease-in-out infinite alternate; }
+.char-flower.is-dancing .g-petals { transform-origin: 200px 150px; --s: 0.07; animation: pulse var(--beat) ease-in-out infinite; }
+.char-flower.is-dancing .g-center { transform-origin: 200px 150px; --s: 0.05; animation: pulse calc(var(--beat) / 2) ease-in-out infinite; }
+.char-flower.is-dancing .g-leafL { transform-origin: 190px 296px; --a: 12deg; animation: swing var(--beat) ease-in-out infinite alternate; }
+.char-flower.is-dancing .g-leafR { transform-origin: 210px 296px; --a: 12deg; animation: swing var(--beat) ease-in-out infinite alternate-reverse; }
+.char-flower.is-dancing.is-special .g-petals { animation: spinFull calc(var(--beat) * 3) linear infinite; }
+.char-flower.is-dancing.is-special .char-root { animation: pulse calc(var(--beat) / 1.5) ease-in-out infinite; --s: 0.1; }
+
+/* =====================================================================
+ * BOAT: rocks on the waves, sails billow, flag waves; rears up for its special move
+ * ===================================================================== */
+.char-boat.is-dancing .char-root { transform-origin: 200px 350px; animation: boatRock calc(var(--beat) * 2) ease-in-out infinite; }
+.char-boat.is-dancing .g-wave { --d: 8px; animation: hop calc(var(--beat) * 1.1) ease-in-out infinite; }
+.char-boat.is-dancing .g-sailB { transform-origin: 212px 180px; --s: 0.06; animation: pulse var(--beat) ease-in-out infinite; }
+.char-boat.is-dancing .g-sailS { transform-origin: 192px 190px; --s: 0.06; animation: pulse var(--beat) ease-in-out infinite; animation-delay: calc(var(--beat) / -2); }
+.char-boat.is-dancing .g-flag { transform-origin: 206px 85px; --a: 10deg; animation: swing calc(var(--beat) / 3) ease-in-out infinite alternate; }
+@keyframes boatRock { 0%, 100% { transform: translateY(0) rotate(calc(var(--amp) * -6deg)); } 50% { transform: translateY(calc(var(--amp) * -12px)) rotate(calc(var(--amp) * 6deg)); } }
+.char-boat.is-dancing.is-special .char-root { animation: boatRear calc(var(--beat) * 2.5) ease-in-out infinite; }
+.char-boat.is-dancing.is-special .g-wave { --d: 20px; animation-duration: calc(var(--beat) / 2); }
+@keyframes boatRear { 0%, 100% { transform: translateY(0) rotate(0); } 35% { transform: translateY(calc(var(--amp) * -46px)) rotate(calc(var(--amp) * -11deg)); } 55% { transform: translateY(calc(var(--amp) * -30px)) rotate(calc(var(--amp) * 9deg)); } 75% { transform: translateY(calc(var(--amp) * 6px)) rotate(calc(var(--amp) * -3deg)); } }
